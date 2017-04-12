@@ -1,0 +1,7 @@
+Setup registry and create images
+    docker create --name registry --publish 127.0.0.1:5000:5000 registry:2
+
+Generate necessary keys and set environment variable CONCOURSE_EXTERNAL_URL (for details see: https://concourse.ci/docker-repository.html).
+
+Create volume for database container
+    docker volume create --name concourse-db

@@ -1,0 +1,4 @@
+css=/cgit/cgit.css
+logo=/cgit/cgit.png
+scan-path=/var/git/
+enable-git-config=1
