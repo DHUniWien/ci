@@ -1,0 +1,18 @@
+TAG=git-server:latest
+REGISTRY=registry:5000
+
+docker build --tag ${TAG} .
+docker tag ${TAG} ${REGISTRY}/${TAG}
+docker push ${REGISTRY}/${TAG}
+
+docker volume create --name git-server-storage
+docker volume create --name git-server-git-home-ssh
+
+docker create \
+  --name git-server \
+  --restart always \
+  --publish 127.0.0.1:10022:22 \
+  --publish 127.0.0.1:8030:80 \
+  --volume git-server-storage:/var/git \
+  --volume git-server-git-home-ssh:/home/git/.ssh \
+${REGISTRY}/${TAG}
