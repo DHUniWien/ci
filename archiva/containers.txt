@@ -1,0 +1,8 @@
+docker volume create --name archiva
+
+docker create \
+  --name archiva \
+  --restart always \
+  --publish 127.0.0.1:8030:8080 \
+  --volume archiva:/archiva-data \
+xetusoss/archiva
