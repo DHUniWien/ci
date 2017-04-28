@@ -1,0 +1,114 @@
+### dns ###
+
+# first to ensure dns's IP of 172.27.0.2
+dns:
+  container_name: dns
+  image: phensley/docker-dns
+  command: ["--domain", "docker.stemmaweb.net"]
+  restart: always
+  volumes: ["/var/run/docker.sock:/docker.sock"]
+
+### concourse ###
+
+concourse-db:
+  container_name: concourse-db
+  image: postgres:9.5
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns"]
+  env_file: concourse.env
+  volumes: ["concourse-db:/var/lib/postgresql/data"]
+
+concourse-web:
+  container_name: concourse-web
+  image: concourse/concourse
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns"]
+  links: [concourse-db]
+  env_file: concourse.env
+  command: web
+  ports: ["127.0.0.1:8050:8080"]
+  volumes: ["./keys/web:/concourse-keys"]
+
+concourse-worker:
+  container_name: concourse-worker
+  image: concourse/concourse
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns"]
+  env_file: concourse.env
+  privileged: true
+  links: [concourse-web]
+  command: worker
+  volumes: ["./keys/worker:/concourse-keys"]
+
+### maven ###
+
+archiva:
+  container_name: archiva
+  image: xetusoss/archiva
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns"]
+  ports: ["127.0.0.1:8020:8080"]
+  volumes: ["archiva:/archiva-data"]
+
+### git ###
+
+git:
+  container_name: git
+  build: ../git-server/
+  # dockerfile: ../git/Dockerfile
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns"]
+  ports:
+    - 0.0.0.0:10022:22
+    - 127.0.0.1:8030:80
+  volumes:
+    - git-server-storage:/var/git
+    - git-server-git-home-ssh:/home/git/.ssh
+
+### docker ###
+
+registry:
+  container_name: registry
+  image: registry:2
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns"]
+  ports: ["127.0.0.1:5000:5000"]
+  volumes: ["registry:/var/lib/registry"]
+
+registry-frontend:
+  container_name: registry-frontend
+  image: konradkleine/docker-registry-frontend:v2
+  restart: always
+  dns: ["172.27.0.2"]
+  dns_search: ["docker.stemmaweb.net"]
+  links: ["dns", "registry"]
+  ports: ["127.0.0.1:8040:80"]
+  env_file: registry-frontend.env
+
+# ### stemmarest ###
+#
+# stemmarest-test:
+#   image: registry:5000/stemmarest-final:latest
+#   ports: 127.0.0.1:8070:8080
+#
+# stemmarest-prod:
+#   image: registry:5000/stemmarest-final:latest
+#   ports: 127.0.0.1:8060:8080
+# 
+# ### moe ###
+#
+# moe:
+#   image: registry:5000/moe-final:latest
+#   ports: 127.0.0.1:8080:8080

@@ -1,2 +1,3 @@
-concourse/keys
-concourse/docker-compose.env
+docker/keys
+docker/concourse.env
+docker/registry-frontend.env
