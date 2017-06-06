@@ -5,9 +5,9 @@
 
 # concourse "fly" binary
 FLYBIN=
-TARGET=
-PIPELINE=
-JOB=$1
+TARGET=$1
+PIPELINE=$2
+JOB=$3
 
 ${FLYBIN} --target ${TARGET} trigger-job -j ${PIPELINE}/${JOB}
 ${FLYBIN} --target ${TARGET} watch -j ${PIPELINE}/${JOB}
