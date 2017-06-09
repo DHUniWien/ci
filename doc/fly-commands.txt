@@ -12,7 +12,7 @@ fly login \
     --username ${USERNAME}
     --password ${PASSWORD}
 
-# set a pipeline, will with existing on
+# set a pipeline
 fly set-pipeline \
     --target stemmarest \
     --pipeline stemmarest \
@@ -28,7 +28,7 @@ fly unpause-pipeline \
     --pipeline stemmarest
 
 # live output of running jobs. especially if there's a lot
-# of output this works better than in browser
+# of output this works better than in the browser
 fly watch \
     --target stemmarest \
     --job <pipeline>/<job>
@@ -40,6 +40,7 @@ fly execute \
     --inputs-from=stemmarest/job-test
 
 # log into a previous container to look around
+# <command> will usually be a shell (sh is available)
 fly hijack \
     --target stemmarest \
     --job <pipeline>/<job> \
