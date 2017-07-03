@@ -19,7 +19,7 @@ function show {
 }
 
 function usage {
-    echo "Usage: `basename $0` [-s] [-h]";
+    echo "Usage: `basename $0` [-s|-r] [-h] <target> <pipeline> <job>";
     echo "-s ... show commands"
     echo "-r ... run commands"
     echo "-h ... this usage message"
