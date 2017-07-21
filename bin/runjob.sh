@@ -2,6 +2,8 @@
 
 # trigger a job, watch it and hijack it after its done
 #
+# make a handy alias: `alias runjob.sh=<checkout of ci>/ci/bin/runjob.sh`
+#
 
 # concourse "fly" binary
 FLYBIN=~/Downloads/fly
