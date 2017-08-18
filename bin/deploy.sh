@@ -4,7 +4,7 @@ CONFIG_FILE=$1
 
 . ${CONFIG_FILE}
 
-/bin/chmod 600 ${SSH_KEYS}
+/bin/chmod 600 ${SSH_KEY}
 
 SSH="/usr/bin/ssh \
     -o StrictHostKeyChecking=no \
