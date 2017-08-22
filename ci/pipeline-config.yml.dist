@@ -1,0 +1,12 @@
+insecure-registries:
+
+## stemmarest ##
+#
+stemmarest-sources-uri:
+version-uri:
+
+stemmarest-test-image:
+stemmarest-test-version-file:
+
+stemmarest-final-base-image:
+stemmarest-final-base-version-file:

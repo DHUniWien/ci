@@ -1,0 +1,80 @@
+---
+resources:
+    - name: stemmarest-sources
+      type: git
+      source:
+        uri: {{stemmarest-sources-uri}}
+        paths: [stemmarest, ci/resources]
+
+    - name: stemmarest-test-image
+      type: docker-image
+      source:
+        repository: {{stemmarest-test-image}}
+        insecure_registries: [ {{insecure-registries}} ]
+
+    - name: stemmarest-test-version
+      type: semver
+      source:
+        driver: git
+        uri: {{version-uri}}
+        branch: master
+        file: {{stemmarest-test-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+    - name: stemmarest-final-base-image
+      type: docker-image
+      source:
+        repository: {{stemmarest-final-base-image}}
+        insecure_registries: [ {{insecure-registries}} ]
+
+    - name: stemmarest-final-base-version
+      type: semver
+      source:
+        driver: git
+        uri: {{version-uri}}
+        branch: master
+        file: {{stemmarest-final-base-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+jobs:
+    - name: build-stemmarest-test-image
+
+      plan:
+        - aggregate:
+          - get: stemmarest-sources
+            trigger: true
+          - get: stemmarest-test-version
+          - get: stemmarest-final-base-version
+
+        - put: stemmarest-test-version
+          params:
+            bump: patch
+
+        - put: stemmarest-test-image
+          params:
+            build: stemmarest-sources/ci/
+            dockerfile: stemmarest-sources/ci/resources/Dockerfile-stemmarest-ci-test
+            tag: stemmarest-test-version/version
+            tag_as_latest: True
+
+    - name: build-stemmarest-final-base-image
+
+      plan:
+        - aggregate:
+          - get: stemmarest-sources
+            trigger: true
+          - get: stemmarest-test-version
+          - get: stemmarest-final-base-version
+
+        - put: stemmarest-final-base-version
+          params:
+            bump: patch
+
+        - put: stemmarest-final-base-image
+          params:
+            build: stemmarest-sources/ci/
+            dockerfile: stemmarest-sources/ci/resources/Dockerfile-stemmarest-final-base
+            tag: stemmarest-final-base-version/version
+            tag_as_latest: True
