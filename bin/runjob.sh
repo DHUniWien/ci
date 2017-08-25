@@ -28,23 +28,24 @@ function usage {
     echo "only one (the first) option is recognised"
 }
 
-while getopts "srh" OPT; do
+MODE="usage"
+
+while getopts ":srh" OPT; do
     TARGET=$2
     PIPELINE=$3
     JOB=$4
 
     case $OPT in
         s)
-            show
-        ;;
-        h)
-            usage
+            MODE="show"
         ;;
         r)
-            run
+            MODE="run"
         ;;
     esac
 
     # only one of the options may be given
-    exit 0
+    # exit 0
 done
+
+${MODE}
