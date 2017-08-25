@@ -1,7 +1,7 @@
 insecure-registries:
 
-## stemmarest ##
-#
+## stemmarest
+
 stemmarest-sources-uri:
 version-uri:
 
@@ -10,3 +10,32 @@ stemmarest-test-version-file:
 
 stemmarest-final-base-image:
 stemmarest-final-base-version-file:
+
+## moe
+
+moe-sources-uri:
+moe-ci-image:
+moe-version-uri:
+moe-version-file:
+
+## tools
+
+tools-sources-uri:
+
+tools-ci-image:
+tools-ci-image-df:
+tools-ci-image-version-uri:
+tools-ci-image-version-file:
+
+tools-final-base-image:
+tools-final-base-image-df:
+tools-final-base-image-version-uri:
+tools-final-base-image-version-file:
+
+## collatex
+
+collatex-sources-uri:
+collatex-ci-image:
+collatex-ci-image-df:
+collatex-image-version-uri:
+collatex-image-version-file:
