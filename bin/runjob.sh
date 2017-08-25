@@ -25,7 +25,7 @@ function usage {
     echo "-s ... show commands"
     echo "-r ... run commands"
     echo "-h ... this usage message"
-    echo "only one (the first) option is recognised"
+    echo "one of (-r, -s) is required"
 }
 
 MODE="usage"
@@ -42,10 +42,11 @@ while getopts ":srh" OPT; do
         r)
             MODE="run"
         ;;
+        *)
+            usage
+            exit 0
+        ;;
     esac
-
-    # only one of the options may be given
-    # exit 0
 done
 
 ${MODE}
