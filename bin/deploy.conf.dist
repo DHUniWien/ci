@@ -1,35 +1,35 @@
-PROJECT=moe
-INSTANCE=test
-INSTANCE_NAME=${PROJECT}-${INSTANCE}
+PROJECT=
+INSTANCE=
+INSTANCE_NAME=
 
 # publish ports to this host
-HOST=127.0.0.1
+HOST=
 # specific port on the host
-HOST_PORT=8080
+HOST_PORT=
 # container port to publish
-CONTAINER_PORT=8080
+CONTAINER_PORT=
 
 # specify an explicit volume
 # (an inline volume will be used if omitted)
-VOLUME=moe-${INSTANCE}
-VOLUME_SIZE=7168m  # 1024 * 7
-MEMORY=1024m
+VOLUME=
+VOLUME_SIZE=
+MEMORY=
 
 # the image to use as <registry>/<image>:<tag>
-REGISTRY=registry:5000
-IMAGE=moe-final
-TAG=`cat version/version`
+REGISTRY=
+IMAGE=
+TAG=
 
 # remove an old instance with the same name (INSTANCE_NAME)
 # explicit volumes are not removed
-REMOVE_OLD_INSTANCE=yes
+REMOVE_OLD_INSTANCE=
 
 # host to deploy to
-DEPLOY_HOST=172.27.0.1
+DEPLOY_HOST=
 
 # location of an ssh key for deployment
-SSH_KEY=ssh-keys/storage/ci-id_rsa
+SSH_KEY=
 
 # user and additional environment for running container
-CONTAINER_USER=root
-# CONTAINER_ENV="VARIABLE=value"
+CONTAINER_USER=
+CONTAINER_ENV=
