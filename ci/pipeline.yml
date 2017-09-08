@@ -69,7 +69,7 @@ resources:
       type: git
       source:
         uri: {{tools-sources-dockerfiles-uri}}
-        paths: [tools, ci/resources]
+        paths: [ci/resources]
 
     - name: tools-ci-image
       type: docker-image
