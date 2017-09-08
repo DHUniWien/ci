@@ -65,10 +65,10 @@ resources:
 
     ## tools
     ##
-    - name: tools-sources
+    - name: tools-sources-dockerfiles
       type: git
       source:
-        uri: {{tools-sources-uri}}
+        uri: {{tools-sources-dockerfiles-uri}}
         paths: [tools, ci/resources]
 
     - name: tools-ci-image
@@ -199,7 +199,7 @@ jobs:
 
       plan:
         - aggregate:
-          - get: tools-sources
+          - get: tools-sources-dockerfiles
             trigger: true
           - get: tools-ci-version
 
@@ -209,7 +209,7 @@ jobs:
 
         - put: tools-ci-image
           params:
-            build: tools-sources/ci/
+            build: tools-sources-dockerfiles/ci/
             dockerfile: {{tools-ci-image-df}}
             tag: tools-ci-version/version
             tag_as_latest: True
@@ -219,7 +219,7 @@ jobs:
 
       plan:
         - aggregate:
-          - get: tools-sources
+          - get: tools-sources-dockerfiles
             trigger: true
           - get: tools-final-base-version
 
@@ -229,7 +229,7 @@ jobs:
 
         - put: tools-final-base-image
           params:
-            build: tools-sources/ci/
+            build: tools-sources-dockerfiles/ci/
             dockerfile: {{tools-final-base-image-df}}
             tag: tools-final-base-version/version
             tag_as_latest: True

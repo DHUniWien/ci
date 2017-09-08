@@ -20,7 +20,7 @@ moe-version-file:
 
 ## tools
 
-tools-sources-uri:
+tools-sources-dockerfiles-uri:
 
 tools-ci-image:
 tools-ci-image-df:
