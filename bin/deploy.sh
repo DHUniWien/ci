@@ -38,7 +38,12 @@ if [ -n "${VOLUME}" ] ; then
         $SSH  /usr/bin/docker volume create --name ${VOLUME}
     fi
 
-    EXTRA_OPTIONS=${EXTRA_OPTIONS}" --volume ${VOLUME}:/var/lib/stemmarest/"
+    if [ -n "${VOLUME_MOUNT_AT}" ] ; then
+        EXTRA_OPTIONS=${EXTRA_OPTIONS}" --volume ${VOLUME}:${VOLUME_MOUNT_AT}"
+    else
+        # legacy default
+        EXTRA_OPTIONS=${EXTRA_OPTIONS}" --volume ${VOLUME}:/var/lib/stemmarest/"
+    fi
 fi
 
 if [ -n "${HOST_PORT}" ] && [ -n "${CONTAINER_PORT}" ]; then

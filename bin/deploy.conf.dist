@@ -11,7 +11,9 @@ CONTAINER_PORT=
 
 # specify an explicit volume
 # (an inline volume will be used if omitted)
+# existing volumes will not be deleted but re-used
 VOLUME=
+VOLUME_MOUNT_AT=
 VOLUME_SIZE=
 MEMORY=
 
