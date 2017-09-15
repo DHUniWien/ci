@@ -4,7 +4,8 @@ resources:
       type: git
       source:
         uri: {{ci-uri}}
-        paths: [ pipelines/stemmaweb/resources ]
+        paths:
+          - pipelines/stemmaweb/resources
 
     ## stemmaREST
     ##
@@ -138,19 +139,19 @@ resources:
 
     ## stemmaWEB
     ##
-    - name: stemmweb-final-base-image
+    - name: stemmaweb-final-base-image
       type: docker-image
       source:
         repository: {{stemmaweb-final-base-image}}
         insecure_registries: [ {{insecure-registries}} ]
 
-    - name: stemmweb-final-base-version
+    - name: stemmaweb-final-base-image-version
       type: semver
       source:
         driver: git
-        uri: {{stemmweb-final-base-version-uri}}
+        uri: {{stemmaweb-final-base-image-version-uri}}
         branch: master
-        file: {{collatex-image-version-file}}
+        file: {{stemmaweb-final-base-image-version-file}}
         initial_version: "0.0.0"
         private_key: {{DHUniWienMU-priv-key}}
 
@@ -287,11 +288,11 @@ jobs:
         - get: ci
           trigger: true
 
-        - put: stemmweb-final-base-image-version
+        - put: stemmaweb-final-base-image-version
           params:
             bump: patch
 
-        - put: stemmweb-final-base-image
+        - put: stemmaweb-final-base-image
           params:
             build: ci/pipelines/stemmaweb/
             dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-base
