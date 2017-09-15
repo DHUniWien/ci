@@ -1,0 +1,3 @@
+FROM registry:5000/stemmaweb-final-base
+WORKDIR /var/www/stemmaweb
+COPY sources/ /varw/www/stemmaweb/
