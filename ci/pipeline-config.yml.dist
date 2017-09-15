@@ -1,4 +1,5 @@
 insecure-registries:
+ci-uri:
 
 ## stemmarest
 
@@ -39,3 +40,9 @@ collatex-ci-image:
 collatex-ci-image-df:
 collatex-image-version-uri:
 collatex-image-version-file:
+
+## stemmWEB
+
+stemmaweb-final-base-image:
+stemmaweb-final-base-image-version-uri:
+stemmaweb-final-base-image-version-file:
