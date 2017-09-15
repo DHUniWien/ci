@@ -1,0 +1,180 @@
+---
+resources:
+    - name: ci
+      type: git
+      source:
+        uri: {{ci-uri}}
+        paths: [ pipelines/stemmaweb/resources/ ]
+
+    - name: ssh-keys
+      type: git
+      source:
+        uri: {{ssh-keys-uri}}
+        private_key: {{DHUniWienMU-priv-key}}
+
+    - name: config
+      type: git
+      source:
+        uri: {{config-uri}}
+
+    - name: sources
+      type: git
+      source:
+        uri: {{sources-uri}}
+        branch: {{sources-branch}}
+
+    - name: final-base-image
+      type: docker-image
+      source:
+        repository: {{final-base-image}}
+        insecure_registries: [ {{insecure-registries}} ]
+
+    - name: final-image
+      type: docker-image
+      source:
+        repository: {{final-image}}
+        insecure_registries: [ {{insecure-registries}} ]
+
+    - name: final-image-version
+      type: semver
+      source:
+        driver: git
+        uri: {{final-image-version-uri}}
+        branch: master
+        file: {{final-image-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+    - name: final-base-image-version
+      type: semver
+      source:
+        driver: git
+        uri: {{final-base-image-version-uri}}
+        branch: master
+        file: {{final-base-image-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+
+jobs:
+  - name: build-final-base-image
+
+    plan:
+      - get: ci
+        trigger: true
+
+      - put: final-base-image-version
+        params:
+          bump: patch
+
+      - put: final-base-image
+        params:
+          build: ci/pipelines/stemmaweb/
+          dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-base
+          tag: final-base-image-version/version
+          tag_as_latest: True
+
+  - name: build-final-image
+
+    plan:
+      - aggregate:
+        - get: final-base-image
+          trigger: true
+          passed: [build-final-base-image]
+        - get: ci
+          trigger: true
+        - get: sources
+          trigger: true
+
+      - put: final-image-version
+        params:
+          bump: patch
+
+      - task: prepare-context
+
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: {{final-base-image}}
+              insecure_registries: [ {{insecure-registries}} ]
+
+          inputs:
+            - name: sources
+            - name: ci
+          outputs:
+            - name: artifacts
+
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                cp -r sources/ artifacts/
+                cp ci/pipelines/stemmaweb/resources/Dockerfile-final artifacts/Dockerfile
+
+      - put: final-image
+        params:
+          build: artifacts
+          tag: final-image-version/version
+          tag_as_latest: True
+
+  - name: test
+
+    plan:
+      - get: final-image
+        passed: [build-final-image]
+        trigger: true
+
+      - task: task-test
+
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: {{final-image}}
+              insecure_registries: [ {{insecure-registries}} ]
+
+          # inputs:
+          #   - name: sources
+          #   - name: config
+
+          run:
+            path: sh
+            args:
+              - -exc
+              - |
+                echo yo
+
+  - name: deploy-moe-prod
+    plan:
+      - aggregate:
+        - get: final-image
+          passed: [test]
+          trigger: true
+        - get: config
+        - get: ssh-keys
+        - get: ci
+
+      - task: task-deploy-moe-prod
+
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: {{final-base-image}}
+              insecure_registries: [ {{insecure-registries}} ]
+
+          inputs:
+            - name: ci
+            - name: config
+            - name: ssh-keys
+
+          run:
+            path: sh
+            args:
+              - "ci/bin/deploy.sh"
+              - "config/deploy-moe-prod.conf"

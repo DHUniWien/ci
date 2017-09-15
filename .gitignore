@@ -1,3 +1,6 @@
 docker/keys
 docker/concourse.env
 docker/registry-frontend.env
+pipeline-config.yml
+pipeline-config-ssh-keys.yml
+*.swp

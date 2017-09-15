@@ -1,0 +1,16 @@
+sources-uri:
+sources-branch:
+
+insecure-registries:
+stemmaweb-final-base-image:
+
+final-image:
+final-base-image:
+final-image-version-uri:
+final-image-version-file:
+final-base-image-version-uri:
+final-base-image-version-file:
+
+ci-uri:
+ssh-keys-uri:
+config-uri:
