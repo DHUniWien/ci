@@ -7,14 +7,14 @@ PASSWORD=
 
 # login to a running concourse
 fly login \
-    --target stemmarest \
+    --target ci \
     --concourse-url http://${HOST}:${PORT}
     --username ${USERNAME}
     --password ${PASSWORD}
 
 # set a pipeline
 fly set-pipeline \
-    --target stemmarest \
+    --target ci \
     --pipeline stemmarest \
     --config pipeline.yml \
     # load variables from file
@@ -24,24 +24,24 @@ fly set-pipeline \
     --var "<RATHER_COMPLEX_VALUES>=$(cat <SOME_FILE>)"
 
 fly unpause-pipeline \
-    --target stemmarest \
+    --target ci \
     --pipeline stemmarest
 
 # live output of running jobs. especially if there's a lot
 # of output this works better than in the browser
 fly watch \
-    --target stemmarest \
+    --target ci \
     --job <pipeline>/<job>
 
 # run a single task
 fly execute \
-    --target stemmarest
+    --target ci
     --config tasks/test.yml
     --inputs-from=stemmarest/job-test
 
 # log into a previous container to look around
 # <command> will usually be a shell (sh is available)
 fly hijack \
-    --target stemmarest \
+    --target ci \
     --job <pipeline>/<job> \
     <command>
