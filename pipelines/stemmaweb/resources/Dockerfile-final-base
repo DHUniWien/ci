@@ -77,15 +77,14 @@ RUN apk update \
     perl-test-deep \
     perl-file-remove \
     perl-clone
-    # libxml2-utils
-    # gmp
-    # git
-    # openssh\
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
 
-RUN cpanm Devel::OverloadInfo Text::Tradition Module::Install::Catalyst
+RUN cpanm \
+    Devel::OverloadInfo \
+    Text::Tradition \
+    Module::Install::Catalyst
 
 # timezone Europe/Vienna
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
