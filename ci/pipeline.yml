@@ -1,5 +1,13 @@
 ---
 resources:
+    - name: ci
+      type: git
+      source:
+        uri: {{ci-uri}}
+        paths: [ pipelines/stemmaweb/resources ]
+
+    ## stemmaREST
+    ##
     - name: stemmarest-sources
       type: git
       source:
@@ -123,6 +131,24 @@ resources:
       source:
         driver: git
         uri: {{collatex-image-version-uri}}
+        branch: master
+        file: {{collatex-image-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+    ## stemmaWEB
+    ##
+    - name: stemmweb-final-base-image
+      type: docker-image
+      source:
+        repository: {{stemmaweb-final-base-image}}
+        insecure_registries: [ {{insecure-registries}} ]
+
+    - name: stemmweb-final-base-version
+      type: semver
+      source:
+        driver: git
+        uri: {{stemmweb-final-base-version-uri}}
         branch: master
         file: {{collatex-image-version-file}}
         initial_version: "0.0.0"
@@ -252,4 +278,22 @@ jobs:
             build: collatex-sources/ci/
             dockerfile: collatex-sources/ci/resources/Dockerfile-ci
             tag: collatex-version/version
+            tag_as_latest: True
+
+
+    - name: build-stemmaweb-final-base-image
+
+      plan:
+        - get: ci
+          trigger: true
+
+        - put: stemmweb-final-base-image-version
+          params:
+            bump: patch
+
+        - put: stemmweb-final-base-image
+          params:
+            build: ci/pipelines/stemmaweb/
+            dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-base
+            tag: stemmaweb-final-base-image-version/version
             tag_as_latest: True
