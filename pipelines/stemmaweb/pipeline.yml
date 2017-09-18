@@ -16,6 +16,7 @@ resources:
       type: git
       source:
         uri: {{config-uri}}
+        private_key: {{DHUniWienMU-priv-key}}
 
     - name: sources
       type: git
@@ -78,11 +79,12 @@ jobs:
 
     plan:
       - aggregate:
+          # dockerfile ci/pipelines/stemmaweb/resources/Dockerfile-final is
+          # not supposed to change;  Makefile.PL and the actual sources are
         - get: final-base-image
           trigger: true
           passed: [build-final-base-image]
         - get: ci
-          trigger: true
         - get: sources
           trigger: true
 
@@ -90,33 +92,10 @@ jobs:
         params:
           bump: patch
 
-      - task: prepare-context
-
-        config:
-          platform: linux
-          image_resource:
-            type: docker-image
-            source:
-              repository: {{final-base-image}}
-              insecure_registries: [ {{insecure-registries}} ]
-
-          inputs:
-            - name: sources
-            - name: ci
-          outputs:
-            - name: artifacts
-
-          run:
-            path: sh
-            args:
-              - -exc
-              - |
-                cp -r sources/ artifacts/
-                cp ci/pipelines/stemmaweb/resources/Dockerfile-final artifacts/Dockerfile
-
       - put: final-image
         params:
-          build: artifacts
+          build: ./
+          dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-notest
           tag: final-image-version/version
           tag_as_latest: True
 
@@ -177,4 +156,4 @@ jobs:
             path: sh
             args:
               - "ci/bin/deploy.sh"
-              - "config/deploy-moe-prod.conf"
+              - "config/deploy-editions-moe.conf"
