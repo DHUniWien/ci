@@ -23,6 +23,7 @@ RUN apk update \
     perl \
     perl-xml-libxml \
     perl-dev \
+    openssh \
     libc-dev \
     perl-text-csv \
     perl-spreadsheet-parseexcel \
