@@ -4,4 +4,4 @@ COPY sources/ /var/www/stemmaweb/
 
 RUN /usr/local/bin/cpanm --notest --installdeps .
 
-RUN /usr/bin/perl /var/www/stemmaweb/script/stemmaweb_server.pl
+CMD /usr/bin/perl /var/www/stemmaweb/script/stemmaweb_server.pl
