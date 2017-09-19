@@ -63,6 +63,7 @@ jobs:
     plan:
       - get: ci
         trigger: true
+      - get: sources
 
       - put: final-base-image-version
         params:
@@ -85,7 +86,10 @@ jobs:
           trigger: true
           passed: [build-final-base-image]
         - get: ci
+          trigger: true
         - get: sources
+          trigger: true
+        - get: config
           trigger: true
 
       - put: final-image-version
@@ -95,7 +99,7 @@ jobs:
       - put: final-image
         params:
           build: ./
-          dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-notest
+          dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final
           tag: final-image-version/version
           tag_as_latest: True
 
@@ -116,16 +120,16 @@ jobs:
               repository: {{final-image}}
               insecure_registries: [ {{insecure-registries}} ]
 
-          # inputs:
-          #   - name: sources
-          #   - name: config
-
           run:
             path: sh
+            # dir is relative to build directory,
+            # something like :/tmp/build/e6c369ea/
+            # dir: /var/www/stemmaweb
             args:
               - -exc
               - |
-                echo yo
+                cd /var/www/stemmaweb
+                prove -Ilib
 
   - name: deploy-moe-prod
     plan:

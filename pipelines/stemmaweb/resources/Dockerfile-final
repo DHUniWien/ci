@@ -1,7 +1,7 @@
 FROM registry:5000/stemmaweb-final-base
 WORKDIR /var/www/stemmaweb
-COPY sources/ /var/www/stemmaweb/
 
-RUN /usr/local/bin/cpanm --installdeps .
+COPY sources/ /var/www/stemmaweb/
+COPY config/stemmaweb.config /var/www/stemmaweb
 
 CMD /usr/bin/perl /var/www/stemmaweb/script/stemmaweb_server.pl
