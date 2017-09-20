@@ -61,9 +61,11 @@ jobs:
   - name: build-final-base-image
 
     plan:
-      - get: ci
-        trigger: true
-      - get: sources
+      - aggregate:
+        - get: ci
+          trigger: true
+        # need sources to run `cpanm --installdeps`
+        - get: sources
 
       - put: final-base-image-version
         params:
