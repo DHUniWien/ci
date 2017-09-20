@@ -280,21 +280,3 @@ jobs:
             dockerfile: collatex-sources/ci/resources/Dockerfile-ci
             tag: collatex-version/version
             tag_as_latest: True
-
-
-    - name: build-stemmaweb-final-base-image
-
-      plan:
-        - get: ci
-          trigger: true
-
-        - put: stemmaweb-final-base-image-version
-          params:
-            bump: patch
-
-        - put: stemmaweb-final-base-image
-          params:
-            build: ci/pipelines/stemmaweb/
-            dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-base
-            tag: stemmaweb-final-base-image-version/version
-            tag_as_latest: True
