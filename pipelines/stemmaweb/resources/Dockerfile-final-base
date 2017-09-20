@@ -38,7 +38,7 @@ RUN cpanm \
 
 # stemmaweb dependencies
 #
-RUN /usr/local/bin/cpanm --installdeps sources/
+RUN /usr/local/bin/cpanm --install-deps sources/
 
 # timezone Europe/Vienna
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
