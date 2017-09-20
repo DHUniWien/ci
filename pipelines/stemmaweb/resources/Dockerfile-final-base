@@ -7,7 +7,9 @@ RUN apk update \
     gcc \
     make \
     libxml2 \
+    libxml2-dev \
     zlib \
+    zlib-dev \
     expat \
     graphviz \
     libssl1.0 \
@@ -23,7 +25,8 @@ RUN apk update \
     openssh \
     libc-dev \
     perl \
-    perl-dev
+    perl-dev \
+    perl-plack
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
