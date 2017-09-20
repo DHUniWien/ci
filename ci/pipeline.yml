@@ -1,12 +1,5 @@
 ---
 resources:
-    - name: ci
-      type: git
-      source:
-        uri: {{ci-uri}}
-        paths:
-          - pipelines/stemmaweb/resources
-
     ## stemmaREST
     ##
     - name: stemmarest-sources
@@ -137,23 +130,6 @@ resources:
         initial_version: "0.0.0"
         private_key: {{DHUniWienMU-priv-key}}
 
-    ## stemmaWEB
-    ##
-    - name: stemmaweb-final-base-image
-      type: docker-image
-      source:
-        repository: {{stemmaweb-final-base-image}}
-        insecure_registries: [ {{insecure-registries}} ]
-
-    - name: stemmaweb-final-base-image-version
-      type: semver
-      source:
-        driver: git
-        uri: {{stemmaweb-final-base-image-version-uri}}
-        branch: master
-        file: {{stemmaweb-final-base-image-version-file}}
-        initial_version: "0.0.0"
-        private_key: {{DHUniWienMU-priv-key}}
 
 jobs:
     - name: build-stemmarest-test-image
