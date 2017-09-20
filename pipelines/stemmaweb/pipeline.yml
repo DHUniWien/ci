@@ -80,13 +80,12 @@ jobs:
 
     plan:
       - aggregate:
-          # dockerfile ci/pipelines/stemmaweb/resources/Dockerfile-final is
-          # not supposed to change;  Makefile.PL and the actual sources are
         - get: final-base-image
           trigger: true
           passed: [build-final-base-image]
+          # dockerfile ci/pipelines/stemmaweb/resources/Dockerfile-final is
+          # not supposed to change;  Makefile.PL and the actual sources are
         - get: ci
-          trigger: true
         - get: sources
           trigger: true
         - get: config
