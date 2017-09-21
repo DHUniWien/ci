@@ -28,7 +28,7 @@ RUN apk update \
 
 # some of stemmaweb's dependencies fail tests or don't install cleanly from CPAN
 RUN apk add --no-cache \
-    perl-plack
+    perl-plack \
     perl-crypt-rijndael
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
