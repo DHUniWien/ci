@@ -40,7 +40,7 @@ RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
 
 # stemmaweb dependencies
 #
-COPY sources/ /tmp/
+COPY sources/ /tmp/sources/
 RUN /usr/local/bin/cpanm --installdeps /tmp/sources/
 # RUN /usr/local/bin/cpanm --installdeps ./sources/
 
