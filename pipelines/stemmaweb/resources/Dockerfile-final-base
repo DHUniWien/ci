@@ -1,48 +1,44 @@
 FROM alpine
 LABEL vendor=DHUniWien
 
-# RUN apk update \
-#  && apk upgrade \
-#  && apk add --no-cache \
-#     gcc \
-#     make \
-#     libxml2 \
-#     libxml2-dev \
-#     zlib \
-#     zlib-dev \
-#     expat \
-#     graphviz \
-#     libssl1.0 \
-#     perl \
-#     tzdata \
-#     wget \
-#     gmp \
-#     gmp-dev \
-#     expat \
-#     expat-dev \
-#     openssl \
-#     openssl-dev \
-#     openssh \
-#     libc-dev \
-#     perl \
-#     perl-dev \
-#     perl-plack
-
-RUN apk update && apk upgrade && apk add perl wget make
+RUN apk update \
+ && apk upgrade \
+ && apk add --no-cache \
+    gcc \
+    make \
+    libxml2 \
+    libxml2-dev \
+    zlib \
+    zlib-dev \
+    expat \
+    graphviz \
+    libssl1.0 \
+    tzdata \
+    wget \
+    gmp \
+    gmp-dev \
+    expat \
+    expat-dev \
+    openssl \
+    openssl-dev \
+    openssh \
+    libc-dev \
+    perl \
+    perl-dev \
+    perl-plack
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
 
-# RUN cpanm \
-#     Devel::OverloadInfo \
-#     Text::Tradition \
-#     Module::Install::Catalyst
+RUN cpanm \
+    Devel::OverloadInfo \
+    Text::Tradition \
+    Module::Install::Catalyst
 
 # stemmaweb dependencies
 #
 COPY sources/ /tmp/sources/
-RUN /usr/local/bin/cpanm --installdeps /tmp/sources/
-# RUN /usr/local/bin/cpanm --installdeps ./sources/
+RUN /usr/local/bin/cpanm --installdeps /tmp/sources
 
 # timezone Europe/Vienna
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
