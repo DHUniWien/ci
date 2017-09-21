@@ -6,27 +6,9 @@ RUN apk update \
  && apk add --no-cache \
     gcc \
     make \
-    libxml2 \
-    libxml2-dev \
-    zlib \
-    zlib-dev \
-    expat \
-    graphviz \
-    libssl1.0 \
-    perl \
-    tzdata \
     wget \
-    gmp \
-    gmp-dev \
-    expat \
-    expat-dev \
-    openssl \
-    openssl-dev \
-    openssh \
-    libc-dev \
     perl \
-    perl-dev \
-    perl-plack
+    perl-dev
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
@@ -38,7 +20,10 @@ RUN cpanm \
 
 # stemmaweb dependencies
 #
-RUN /usr/local/bin/cpanm --installdeps ./sources/
+RUN find && pwd
+COPY sources/ /tmp/
+RUN /usr/local/bin/cpanm --installdeps /tmp/sources/
+# RUN /usr/local/bin/cpanm --installdeps ./sources/
 
 # timezone Europe/Vienna
 RUN cp /usr/share/zoneinfo/Europe/Vienna /etc/localtime && \
