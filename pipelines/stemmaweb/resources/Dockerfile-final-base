@@ -9,7 +9,8 @@ RUN apk update \
     wget \
     perl \
     perl-dev
-RUN find && pwd
+
+RUN pwd && ls -l
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
