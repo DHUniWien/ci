@@ -28,7 +28,7 @@ LABEL vendor=DHUniWien
 #     perl-dev \
 #     perl-plack
 
-RUN apk update && apk upgrade && apk add perl wget
+RUN apk update && apk upgrade && apk add perl wget make
 
 RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
