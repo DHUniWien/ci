@@ -35,6 +35,7 @@ RUN wget --no-check-certificate https://cpanmin.us -O cpanm && \
     perl cpanm App::cpanminus
 
 RUN cpanm \
+    IO::All \
     Devel::OverloadInfo \
     Text::Tradition \
     Module::Install::Catalyst
