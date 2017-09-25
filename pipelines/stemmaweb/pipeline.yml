@@ -136,7 +136,7 @@ jobs:
     plan:
       - aggregate:
         - get: final-image
-          passed: [test]
+          passed: [build-final-image]
           trigger: true
         - get: config
         - get: ssh-keys
