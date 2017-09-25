@@ -132,7 +132,7 @@ jobs:
                 cd /var/www/stemmaweb
                 prove -Ilib
 
-  - name: deploy-moe-prod
+  - name: deploy-editions-moe
     plan:
       - aggregate:
         - get: final-image
@@ -142,7 +142,7 @@ jobs:
         - get: ssh-keys
         - get: ci
 
-      - task: task-deploy-moe-prod
+      - task: task-deploy-editions-moe
 
         config:
           platform: linux
