@@ -73,7 +73,7 @@ jobs:
 
       - put: final-base-image
         params:
-          build: ci/pipelines/stemmaweb/
+          build: ./
           dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-final-base
           tag: final-base-image-version/version
           tag_as_latest: True
