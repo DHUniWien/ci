@@ -35,6 +35,22 @@ while getopts ":srh" OPT; do
     PIPELINE=$3
     JOB=$4
 
+    if [[ ! ${TARGET} ]]; then
+        echo -e "ERROR: target missing\n"
+        usage
+        exit -2
+    fi
+    if [[ ! ${PIPELINE} ]]; then
+        echo -e "ERROR: pipeline missing\n"
+        usage
+        exit -3
+    fi
+    if [[ ! ${JOB} ]]; then
+        echo -e "ERROR: job missing\n"
+        usage
+        exit -4
+    fi
+
     case $OPT in
         s)
             MODE="show"

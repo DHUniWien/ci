@@ -4,7 +4,8 @@
 FLYBIN=~/Downloads/fly
 
 function run {
-    ${FLYBIN} set-pipeline \
+    ${FLYBIN} \
+        set-pipeline \
         --target ${TARGET} \
         --pipeline ${PIPELINE} \
         --config ./pipeline.yml \
@@ -13,18 +14,23 @@ function run {
 }
 
 function show {
-    echo "${FLYBIN} set-pipeline \
+    CMD="${FLYBIN} \
+        set-pipeline \
         --target ${TARGET} \
         --pipeline ${PIPELINE} \
         --config ./pipeline.yml \
         --load-vars-from ./pipeline-config.yml \
         --load-vars-from ~/.ssh/pipeline-config-ssh-key.yml"
+
+    echo $CMD
 }
 
 
 function usage {
-    echo "Usage: `basename $0` [-s|-r] [-h] <target> <pipeline>";
-    echo "$0 expects to find the following three files: "
+    PGM=`basename $0`
+
+    echo "Usage: ${PGM} [-s|-r] [-h] <target> <pipeline>";
+    echo "${PGM} expects to find the following three files: "
     echo "  ./pipeline.yml"
     echo "  ./pipeline-config.yml"
     echo "  ~/.ssh/pipeline-config-ssh-key.yml"
@@ -39,6 +45,17 @@ MODE="usage"
 while getopts ":srh" OPT; do
     TARGET=$2
     PIPELINE=$3
+
+    if [[ ! ${TARGET} ]]; then
+        echo ERROR: target missing
+        usage
+        exit -2
+    fi
+    if [[ ! ${PIPELINE} ]]; then
+        echo ERROR: pipeline missing
+        usage
+        exit -3
+    fi
 
     case $OPT in
         s)
