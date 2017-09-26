@@ -58,6 +58,10 @@ if [ -n "${CONTAINER_ENV}" ]; then
     EXTRA_OPTIONS=${EXTRA_OPTIONS}" --env ${CONTAINER_ENV}"
 fi
 
+if [ -n "${TTY}" ] && [ "${TTY}" = "yes" ] ; then
+    EXTRA_OPTIONS=${EXTRA_OPTIONS}" --tty"
+fi
+
 echo "create new container"
 $SSH  /usr/bin/docker create \
   --name    ${INSTANCE_NAME} \

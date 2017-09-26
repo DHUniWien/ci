@@ -35,3 +35,6 @@ SSH_KEY=
 # user and additional environment for running container
 CONTAINER_USER=
 CONTAINER_ENV=
+
+# allocate a pseudo-tty
+TTY=
