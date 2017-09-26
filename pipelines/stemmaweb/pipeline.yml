@@ -141,6 +141,7 @@ jobs:
         - get: config
         - get: ssh-keys
         - get: ci
+        - get: final-image-version
 
       - task: task-deploy-editions-moe
 
@@ -156,6 +157,7 @@ jobs:
             - name: ci
             - name: config
             - name: ssh-keys
+            - name: final-image-version
 
           run:
             path: sh
