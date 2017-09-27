@@ -36,26 +36,57 @@ resources:
         repository: {{final-image}}
         insecure_registries: [ {{insecure-registries}} ]
 
-    - name: final-image-version
-      type: semver
+    - name: configured-test-image
+      type: docker-image
       source:
-        driver: git
-        uri: {{final-image-version-uri}}
-        branch: master
-        file: {{final-image-version-file}}
-        initial_version: "0.0.0"
-        private_key: {{DHUniWienMU-priv-key}}
+        repository: {{configured-test-image}}
+        insecure_registries: [ {{insecure-registries}} ]
+
+    - name: configured-image
+      type: docker-image
+      source:
+        repository: {{configured-image}}
+        insecure_registries: [ {{insecure-registries}} ]
 
     - name: final-base-image-version
       type: semver
       source:
         driver: git
-        uri: {{final-base-image-version-uri}}
+        uri: {{version-uri}}
         branch: master
         file: {{final-base-image-version-file}}
         initial_version: "0.0.0"
         private_key: {{DHUniWienMU-priv-key}}
 
+    - name: final-image-version
+      type: semver
+      source:
+        driver: git
+        uri: {{version-uri}}
+        branch: master
+        file: {{final-image-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+    - name: configured-test-image-version
+      type: semver
+      source:
+        driver: git
+        uri: {{version-uri}}
+        branch: master
+        file: {{configured-test-image-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
+
+    - name: configured-image-version
+      type: semver
+      source:
+        driver: git
+        uri: {{version-uri}}
+        branch: master
+        file: {{configured-image-version-file}}
+        initial_version: "0.0.0"
+        private_key: {{DHUniWienMU-priv-key}}
 
 jobs:
   - name: build-final-base-image
@@ -104,14 +135,14 @@ jobs:
           tag: final-image-version/version
           tag_as_latest: True
 
-  - name: test
+  - name: test-final-image
 
     plan:
       - get: final-image
         passed: [build-final-image]
         trigger: true
 
-      - task: task-test
+      - task: task-test-final-image
 
         config:
           platform: linux
@@ -132,18 +163,67 @@ jobs:
                 cd /var/www/stemmaweb
                 prove -Ilib
 
-  - name: deploy-editions-moe
+  - name: build-configured-test-image
+
     plan:
       - aggregate:
         - get: final-image
+          trigger: true
           passed: [build-final-image]
+        - get: ci
+        - get: config
+          trigger: true
+
+      - put: configured-test-image-version
+        params:
+          bump: patch
+
+      - task: task-copy
+
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: {{final-image}}
+              insecure_registries: [ {{insecure-registries}} ]
+
+          inputs:
+            - name: config
+          outputs:
+            - name: artifacts
+
+          run:
+            path: cp
+            args:
+              - config/stemmaweb-editions-moe-test.conf
+              - artifacts/stemmaweb.conf
+
+      - put: configured-test-image
+        params:
+          build: ./
+          dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-configured
+          tag: configured-test-image-version/version
+          tag_as_latest: True
+
+
+  - name: deploy-editions-moe-test
+    plan:
+      - aggregate:
+        - get: configured-test-image
+          passed: [build-configured-test-image]
           trigger: true
         - get: config
+          trigger: true
         - get: ssh-keys
         - get: ci
-        - get: final-image-version
+        - get: configured-test-image-version
 
-      - task: task-deploy-editions-moe
+      - task: task-deploy-editions-moe-test
+
+        # especially handy when tasks are in their own files and re-used!
+        input_mapping: { version: configured-test-image-version }
+        # output_mapping: {}
 
         config:
           platform: linux
@@ -157,7 +237,88 @@ jobs:
             - name: ci
             - name: config
             - name: ssh-keys
-            - name: final-image-version
+            - name: version
+
+          run:
+            path: sh
+            args:
+              - "ci/bin/deploy.sh"
+              - "config/deploy-editions-moe-test.conf"
+
+
+  - name: build-configured-image
+
+    plan:
+      - aggregate:
+        - get: final-image
+          trigger: true
+          passed: [build-final-image]
+        - get: ci
+        - get: config
+          trigger: true
+
+      - put: configured-image-version
+        params:
+          bump: patch
+
+      - task: task-copy
+
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: {{final-image}}
+              insecure_registries: [ {{insecure-registries}} ]
+
+          inputs:
+            - name: config
+          outputs:
+            - name: artifacts
+
+          run:
+            path: cp
+            args:
+              - config/stemmaweb-editions-moe.conf
+              - artifacts/stemmaweb.conf
+
+      - put: configured-image
+        params:
+          build: ./
+          dockerfile: ci/pipelines/stemmaweb/resources/Dockerfile-configured
+          tag: configured-image-version/version
+          tag_as_latest: True
+
+
+  - name: "deploy-editions-moe (DON'T TOUCH ME)"
+    plan:
+      - aggregate:
+        - get: configured-image
+          passed: [build-configured-image]
+        - get: config
+        - get: ssh-keys
+        - get: ci
+        - get: configured-image-version
+
+      - task: task-deploy-editions-moe
+
+        # especially handy when tasks are in their own files and re-used!
+        input_mapping: { version: configured-image-version }
+        # output_mapping: {}
+
+        config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: {{final-base-image}}
+              insecure_registries: [ {{insecure-registries}} ]
+
+          inputs:
+            - name: ci
+            - name: config
+            - name: ssh-keys
+            - name: version
 
           run:
             path: sh
