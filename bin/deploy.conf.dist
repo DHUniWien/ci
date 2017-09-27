@@ -38,3 +38,6 @@ CONTAINER_ENV=
 
 # allocate a pseudo-tty
 TTY=
+
+# link to another container by name
+LINK=
