@@ -1,0 +1,5 @@
+FROM registry:5000/stemmaweb-final
+
+COPY artifacts/stemmaweb.conf /var/www/stemmaweb
+
+CMD ["/usr/bin/perl", "/var/www/stemmaweb/script/stemmaweb_server.pl"]
