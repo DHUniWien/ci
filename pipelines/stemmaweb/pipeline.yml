@@ -173,6 +173,7 @@ jobs:
         - get: ci
         - get: config
           trigger: true
+          passed: [build-final-image]
 
       - put: configured-test-image-version
         params:
@@ -214,6 +215,7 @@ jobs:
           passed: [build-configured-test-image]
           trigger: true
         - get: config
+          passed: [build-configured-test-image]
           trigger: true
         - get: ssh-keys
         - get: ci
@@ -256,6 +258,7 @@ jobs:
         - get: ci
         - get: config
           trigger: true
+          passed: [build-final-image]
 
       - put: configured-image-version
         params:
@@ -290,7 +293,7 @@ jobs:
           tag_as_latest: True
 
 
-  - name: "deploy-editions-moe (DON'T TOUCH ME)"
+  - name: deploy-editions-moe
     plan:
       - aggregate:
         - get: configured-image
