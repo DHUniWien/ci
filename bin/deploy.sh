@@ -62,6 +62,10 @@ if [ -n "${TTY}" ] && [ "${TTY}" = "yes" ] ; then
     EXTRA_OPTIONS=${EXTRA_OPTIONS}" --tty"
 fi
 
+if [ -n "${LINK}" ] ; then
+    EXTRA_OPTIONS=${EXTRA_OPTIONS}" --link ${LINK}"
+fi
+
 echo "create new container"
 $SSH  /usr/bin/docker create \
   --name    ${INSTANCE_NAME} \
