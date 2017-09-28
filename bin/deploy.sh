@@ -67,6 +67,15 @@ if [ -n "${LINK}" ] ; then
 fi
 
 echo "create new container"
+echo "/usr/bin/docker create \
+  --name    ${INSTANCE_NAME} \
+  --memory  ${MEMORY} \
+  --cpu-period=100000 \
+  --cpu-quota=100000 \
+  --restart always \
+  $EXTRA_OPTIONS \
+${REGISTRY}/${IMAGE}:${TAG}"
+
 $SSH  /usr/bin/docker create \
   --name    ${INSTANCE_NAME} \
   --memory  ${MEMORY} \
