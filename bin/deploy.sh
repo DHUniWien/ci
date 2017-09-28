@@ -35,6 +35,7 @@ if [ -n "${VOLUME}" ] ; then
     VOLUME_EXISTS=`$SSH  /usr/bin/docker volume ls | awk "{print $2}" | grep -e "${VOLUME}"`
     if [ ! "${VOLUME_EXISTS}" ] ; then
         echo "create volume <${VOLUME}> ..."
+        echo "/usr/bin/docker volume create --name ${VOLUME}"
         $SSH  /usr/bin/docker volume create --name ${VOLUME}
     fi
 
