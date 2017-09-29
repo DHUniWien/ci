@@ -24,7 +24,8 @@ RUN apk update \
     openssh \
     libc-dev \
     perl \
-    perl-dev
+    perl-dev \
+    perl-ipc-system-simple
 
 # some of stemmaweb's dependencies fail tests or don't install cleanly from CPAN
 RUN apk add --no-cache \
