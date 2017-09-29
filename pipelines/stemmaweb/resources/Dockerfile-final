@@ -3,4 +3,8 @@ WORKDIR /var/www/stemmaweb
 
 COPY sources/ /var/www/stemmaweb/
 
+# basically, pick up anything stemmaweb-final-base isn't
+# aware of yet. see wiki at Ops/CI/stemmaweb for details
+RUN /usr/local/bin/cpanm --installdeps /var/www/stemmaweb/
+
 CMD ["/usr/bin/perl", "/var/www/stemmaweb/script/stemmaweb_server.pl"]
