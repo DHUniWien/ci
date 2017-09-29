@@ -37,6 +37,13 @@ if [ -n "${VOLUME}" ] ; then
         echo "create volume <${VOLUME}> ..."
         echo "/usr/bin/docker volume create --name ${VOLUME}"
         $SSH  /usr/bin/docker volume create --name ${VOLUME}
+    # remove already existing volumes of the same name as ${VOLUME}
+    # elif [ "${VOLUME_EXISTS}" ] && [ "${REMOVE_OLD_VOLUME}" = "yes" ] ; then
+    #     echo "remove volume <${VOLUME_NAME}> ..."
+    #     $SSH  /usr/bin/docker volume rm ${VOLUME_NAME}
+    #     echo "create volume <${VOLUME}> ..."
+    #     echo "/usr/bin/docker volume create --name ${VOLUME}"
+    #     $SSH  /usr/bin/docker volume create --name ${VOLUME}
     fi
 
     if [ -n "${VOLUME_MOUNT_AT}" ] ; then

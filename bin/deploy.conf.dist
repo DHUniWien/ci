@@ -13,6 +13,9 @@ CONTAINER_PORT=
 # (an inline volume will be used if omitted)
 # existing volumes will not be deleted but re-used
 VOLUME=
+# remove an already existing volume of the same name
+# (this feature is not (yet) enabled in deploy.sh)
+# REMOVE_OLD_VOLUME=
 VOLUME_MOUNT_AT=
 VOLUME_SIZE=
 MEMORY=
