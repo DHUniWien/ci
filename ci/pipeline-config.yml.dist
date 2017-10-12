@@ -12,13 +12,6 @@ stemmarest-test-version-file:
 stemmarest-final-base-image:
 stemmarest-final-base-version-file:
 
-## moe
-
-moe-sources-uri:
-moe-ci-image:
-moe-version-uri:
-moe-version-file:
-
 ## tools
 
 tools-sources-dockerfiles-uri:

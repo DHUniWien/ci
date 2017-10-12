@@ -40,30 +40,6 @@ resources:
         initial_version: "0.0.0"
         private_key: {{DHUniWienMU-priv-key}}
 
-    ## moe
-    ##
-    - name: moe-sources
-      type: git
-      source:
-        uri: {{moe-sources-uri}}
-        paths: [moe, ci/resources]
-        private_key: {{DHUniWienMU-priv-key}}
-
-    - name: moe-ci-image
-      type: docker-image
-      source:
-        repository: {{moe-ci-image}}
-        insecure_registries: [ {{insecure-registries}} ]
-
-    - name: moe-ci-version
-      type: semver
-      source:
-        driver: git
-        uri: {{moe-version-uri}}
-        branch: master
-        file: {{moe-version-file}}
-        initial_version: "0.0.0"
-        private_key: {{DHUniWienMU-priv-key}}
 
     ## tools
     ##
@@ -171,28 +147,6 @@ jobs:
             build: stemmarest-sources/ci/
             dockerfile: stemmarest-sources/ci/resources/Dockerfile-stemmarest-final-base
             tag: stemmarest-final-base-version/version
-            tag_as_latest: True
-
-
-    ## moe
-    ##
-    - name: build-moe-ci-image
-
-      plan:
-        - aggregate:
-          - get: moe-sources
-            trigger: true
-          - get: moe-ci-version
-
-        - put: moe-ci-version
-          params:
-            bump: patch
-
-        - put: moe-ci-image
-          params:
-            build: moe-sources/ci/
-            dockerfile: moe-sources/ci/resources/Dockerfile-ci
-            tag: moe-ci-version/version
             tag_as_latest: True
 
 
