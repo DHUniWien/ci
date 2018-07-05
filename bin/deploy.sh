@@ -1,6 +1,7 @@
 #!/bin/sh
 
 CONFIG_FILE=$1
+TAG=$2   # can be overridden in the config file
 
 . ${CONFIG_FILE}
 
