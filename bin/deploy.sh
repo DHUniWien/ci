@@ -1,12 +1,18 @@
 #!/bin/sh
 
 CONFIG_FILE=$1
-TAG=$2
-if [ -f $TAG ]; then
-    TAG=`cat $TAG`
-fi   # can be overridden in the config file
+# Specify a version on the command line, to override config version
+OVERRIDETAG=$2
+if [ $OVERRIDETAG -a -f $OVERRIDETAG ]; then
+    OVERRIDETAG=`cat $OVERRIDETAG`
+fi
 
 . ${CONFIG_FILE}
+
+# Do the overriding, if specified
+if [ $OVERRIDETAG ]; then
+    TAG=$OVERRIDETAG
+fi
 
 /bin/chmod 600 ${SSH_KEY}
 
