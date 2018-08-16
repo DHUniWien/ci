@@ -3,8 +3,10 @@
 CONFIG_FILE=$1
 # Specify a version on the command line, to override config version
 OVERRIDETAG=$2
-if [ $OVERRIDETAG -a -f $OVERRIDETAG ]; then
+if [ $OVERRIDETAG ]; then
+  if [ -f $OVERRIDETAG ]; then
     OVERRIDETAG=`cat $OVERRIDETAG`
+  fi
 fi
 
 . ${CONFIG_FILE}
